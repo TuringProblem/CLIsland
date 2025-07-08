@@ -24,9 +24,60 @@ profile.cov
 go.work
 go.work.sum
 
-# env file
-.env
+main
+person
+cmd/main
+cmd/person
+bin/
+dist/
 
-# Editor/IDE
-# .idea/
-# .vscode/
+# Build artifacts
+build/
+*.o
+*.a
+
+# Environment files
+.env
+.env.local
+.env.development
+.env.test
+.env.production
+.env.*.local
+
+# IDE and Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+
+# Database files
+*.db
+*.sqlite
+*.sqlite3
+
+# Backup files
+*.bak
+*.backup
+
+# Configuration files with sensitive data
+config.local.*
+secrets.*
