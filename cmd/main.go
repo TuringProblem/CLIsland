@@ -13,22 +13,44 @@ func main() {
 	initialize()
 	fmt.Println("✔Hello, World")
 
-	// Create and display a person using our colors
-	person := createExamplePerson()
-	fmt.Printf("Person Created: %s\n",
-		person.Name)
 }
 
 func initialize() {
 	welcome()
+	time.Sleep(time.Duration(3) * time.Second)
 	getInputs()
+}
+
+func design() int {
+	printTag()
+	fmt.Println("Please select an option:")
+	fmt.Println("1. Start normal")
+	fmt.Println("2. Start dev mode")
+	var input int
+	fmt.Scan(&input)
+	return input
 }
 
 func fail()                   { fmt.Println("❌ You have failed to load ❌"); os.Exit(1) }
 func success(nametype string) { fmt.Printf("✔ You have successfully loaded %s ✔ ", nametype) }
-func welcome()                { welcomeScreen(); fmt.Println(CLEAR_SCREEN) }
-func welcomeScreen()          { fmt.Println(BlueBackground + "Welcome to the game") }
+func welcome() {
+	fmt.Println(CLEAR_SCREEN)
+	which(design())
 
+}
+func welcomeScreen(person Person) {
+	fmt.Println(BlueBackground + "Welcome to the game" + person.Name + ResetBackground)
+}
+func which(option int) string {
+	switch option {
+	case 1:
+		return "1"
+	case 2:
+		return "2"
+	default:
+		return "You must enter either [1] or [2]"
+	}
+}
 func getInputs() {
 	fmt.Println("Grabbing inputs...")
 	var rand int = rand.Intn(10)

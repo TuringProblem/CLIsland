@@ -57,3 +57,11 @@ func createExamplePerson() Person {
 
 	return myPerson
 }
+
+func (p *Person) GetInterests() []Interest {
+	var interests []Interest
+	for k := range p.Interests.InterestType {
+		interests = append(interests, k)
+	}
+	return interests
+}

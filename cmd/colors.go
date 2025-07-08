@@ -13,6 +13,7 @@ const (
 	Magenta = "\033[35m"
 	Cyan    = "\033[36m"
 	White   = "\033[37m"
+	Reset   = "\033[39m"
 )
 
 const (
@@ -24,6 +25,7 @@ const (
 	MagentaBackground = "\033[45m"
 	CyanBackground    = "\033[46m"
 	WhiteBackground   = "\033[47m"
+	ResetBackground   = "\033[49m"
 )
 
 const (
