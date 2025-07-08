@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"math/rand"
-	"os"
 	"time"
 )
 
@@ -22,21 +21,15 @@ func initialize() {
 }
 
 func design() int {
-	printTag()
-	fmt.Println("Please select an option:")
-	fmt.Println("1. Start normal")
-	fmt.Println("2. Start dev mode")
+	options()
 	var input int
 	fmt.Scan(&input)
 	return input
 }
-
-func fail()                   { fmt.Println("❌ You have failed to load ❌"); os.Exit(1) }
-func success(nametype string) { fmt.Printf("✔ You have successfully loaded %s ✔ ", nametype) }
 func welcome() {
 	fmt.Println(CLEAR_SCREEN)
-	which(design())
-
+	answer := which(design())
+	fmt.Println(answer)
 }
 func welcomeScreen(person Person) {
 	fmt.Println(BlueBackground + "Welcome to the game" + person.Name + ResetBackground)
@@ -46,7 +39,7 @@ func which(option int) string {
 	case 1:
 		return "1"
 	case 2:
-		return "2"
+		return iGotATeeeexxxt()
 	default:
 		return "You must enter either [1] or [2]"
 	}
