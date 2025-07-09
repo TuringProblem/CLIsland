@@ -1,5 +1,9 @@
 package main
 
+import (
+	"fmt"
+)
+
 type Sex string
 
 const (
@@ -10,13 +14,16 @@ const (
 type Interest string
 
 const (
-	Music   Interest = "Music"
-	Sports  Interest = "Sports"
-	Reading Interest = "Reading"
-	Writing Interest = "Writing"
-	Coding  Interest = "Coding"
-	Art     Interest = "Art"
-	Travel  Interest = "Travel"
+	Music    Interest = "Music"
+	Sports   Interest = "Sports"
+	Reading  Interest = "Reading"
+	Writing  Interest = "Writing"
+	Coding   Interest = "Coding"
+	Art      Interest = "Art"
+	Travel   Interest = "Travel"
+	Swimming Interest = "Swimming"
+	Gaming   Interest = "Gaming"
+	Lifting  Interest = "Lifting"
 )
 
 type Interests struct {
@@ -30,7 +37,6 @@ type Person struct {
 	Weight    float64
 	sex       Sex
 	Interests Interests
-	Hobbies   []string
 }
 
 func createExamplePerson() Person {
@@ -51,7 +57,6 @@ func createExamplePerson() Person {
 				Travel:  1,
 			},
 		},
-		Hobbies: []string{"Coding", "Travel"},
 	}
 
 	return myPerson
@@ -63,4 +68,35 @@ func (p *Person) GetInterests() []Interest {
 		interests = append(interests, k)
 	}
 	return interests
+}
+func (p *Person) PrintPersonInterestsPretty() {
+	for k, v := range p.Interests.InterestType {
+		fmt.Printf("%s\n%s%s\n", k, printAsBlock(v), ResetBackground)
+	}
+}
+
+func printAsBlock(interestWeight int) string {
+	var output string
+	switch interestWeight {
+	case 1:
+		output = fmt.Sprintf("[ %s█%s | | | | | | ]", Green, Reset)
+		return output
+	case 2:
+		output = fmt.Sprintf("[ %s█ █%s | | | | | ]", Green, Reset)
+		return output
+	case 3:
+		output = fmt.Sprintf("[ %s█ █ █%s | | | | ]", Green, Reset)
+		return output
+	case 4:
+		output = fmt.Sprintf("[ %s█ █ █ █%s | | | ]", Green, Reset)
+		return output
+	case 5:
+		output = fmt.Sprintf("[ %s█ █ █ █ █%s | | ]", Green, Reset)
+		return output
+	case 6:
+		output = fmt.Sprintf("[ %s█ █ █ █ █ █%s ]", Green, Reset)
+		return output
+	default:
+		return "[ | | | | | | | ]"
+	}
 }

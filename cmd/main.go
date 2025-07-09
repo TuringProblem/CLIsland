@@ -25,7 +25,7 @@ func versionResponse() int {
 }
 
 func welcomeScreen(person Person) {
-	TUIPrint(BlueBackground + "Welcome to the game" + person.Name + ResetBackground)
+	TUIPrint(BlueBackground + "Welcome to the game " + person.Name + ResetBackground)
 }
 
 func which(option int) {
