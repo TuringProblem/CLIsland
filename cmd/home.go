@@ -1,9 +1,5 @@
 package main
 
-import (
-	"regexp"
-)
-
 func start(message string) {
 	TUIPrint(message)
 	characterBuild()
@@ -11,15 +7,13 @@ func start(message string) {
 
 func characterBuild() {
 	TUIPrint("")
-	for _, prompt := range getSectionPrompts["character"] {
-		handlePromptIterator(prompt)
+	for k, v := range getSectionPrompts["character"] {
+		if k == "sex" {
+			handlePromptIterator(v)
+		}
 	}
 }
 func handlePromptIterator(prompt string) {
-	var sex string = "(sex)"
-	match, _ := regexp.MatchString(sex, prompt)
-	if match {
-		TUIPrint(prompt)
-		success("GREAT SUCESSSSSS")
-	}
+	TUIPrint(prompt)
+	success("GREAT SUCESSSSSS")
 }
