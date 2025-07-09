@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"os"
 )
 
 func options() {
@@ -23,7 +22,7 @@ func setMode(mode int) {
 }
 func TUIPrint(message string) { fmt.Println(message) } // THIS IS THE MAIN PRINTING FUNCTION (JUST A WRAPPER AYO)
 func getTag() string          { return GreenBackground + "Deveoped by: @Override" + ResetBackground }
-func printTag()               { fmt.Println(getTag()) }
+func printTag()               { TUIPrint(getTag()) }
 func iGotATeeeexxxt() string  { return "📱 I GOT A TEEEEEEEEEEXT!!!!!\n" }
-func success(nametype string) { fmt.Printf("✔ You have successfully loaded %s ✔ ", nametype) }
-func fail()                   { fmt.Println("❌ You have failed to load ❌"); os.Exit(1) }
+func success(nametype string) { TUIPrint(GreenBackground + "✔ " + nametype + ResetBackground) }
+func fail()                   { TUIPrint(RedBackground + "✘ FAIL" + ResetBackground) }

@@ -12,7 +12,6 @@ func main() {
 	printTag()
 	initialize()
 	TUIPrint("✔Hello, World")
-
 }
 
 func initialize() { welcome() }
@@ -32,10 +31,12 @@ func welcomeScreen(person Person) {
 func which(option int) {
 	switch option {
 	case 1:
+		setMode(1)
 		welcomeScreen(createExamplePerson())
 	case 2:
-		start(iGotATeeeexxxt())
+		TUIPrint(CLEAR_SCREEN)
 		setMode(2)
+		start(iGotATeeeexxxt())
 	default:
 		fail()
 	}

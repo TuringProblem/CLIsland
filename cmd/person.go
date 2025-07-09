@@ -33,7 +33,6 @@ type Person struct {
 	Hobbies   []string
 }
 
-// Example usage function
 func createExamplePerson() Person {
 	myPerson := Person{
 		Name:   "Andrew",
