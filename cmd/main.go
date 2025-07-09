@@ -2,48 +2,46 @@ package main
 
 import (
 	"fmt"
-	"math/rand"
-	"time"
+	//"math/rand"
+	//"time"
 )
 
 const CLEAR_SCREEN = "\033[2J"
 
 func main() {
+	printTag()
 	initialize()
-	fmt.Println("✔Hello, World")
+	TUIPrint("✔Hello, World")
 
 }
 
-func initialize() {
-	welcome()
-	time.Sleep(time.Duration(3) * time.Second)
-	getInputs()
-}
+func initialize() { welcome() }
+func welcome()    { TUIPrint(CLEAR_SCREEN); which(versionResponse()) }
 
-func design() int {
+func versionResponse() int {
 	options()
 	var input int
 	fmt.Scan(&input)
 	return input
 }
-func welcome() {
-	fmt.Println(CLEAR_SCREEN)
-	answer := which(design())
-	fmt.Println(answer)
-}
+
 func welcomeScreen(person Person) {
-	fmt.Println(BlueBackground + "Welcome to the game" + person.Name + ResetBackground)
+	TUIPrint(BlueBackground + "Welcome to the game" + person.Name + ResetBackground)
 }
-func which(option int) string {
+
+func which(option int) {
 	switch option {
 	case 1:
-		return "1"
+		welcomeScreen(createExamplePerson())
 	case 2:
-		return iGotATeeeexxxt()
+		start(iGotATeeeexxxt())
+		setMode(2)
 	default:
-		return "You must enter either [1] or [2]"
+		fail()
 	}
 }
+
+/**
 func getInputs() {
 	fmt.Println("Grabbing inputs...")
 	var rand int = rand.Intn(10)
@@ -56,3 +54,4 @@ func getInputs() {
 		time.Sleep(time.Duration(1) * time.Second)
 	}
 }
+**/
