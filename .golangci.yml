@@ -10,7 +10,6 @@ linters:
     - gosimple
     - unused
     - ineffassign
-    - typecheck
     - gofmt
     - goimports
     - misspell
@@ -37,4 +36,5 @@ issues:
   max-same-issues: 0
 
 output:
-  format: colored-line-number 
+  formats:
+    - colored-line-number 
