@@ -9,7 +9,6 @@ import (
 	"github.com/TuringProblem/CLIsland/internal/domain"
 )
 
-// StubEventManager implements EventManager with basic functionality
 type StubEventManager struct{}
 
 func NewStubEventManager() *StubEventManager {
@@ -40,7 +39,6 @@ func (s *StubEventManager) ValidateEvent(ctx context.Context, event *domain.Even
 	return nil
 }
 
-// StubCharacterManager implements CharacterManager with basic functionality
 type StubCharacterManager struct{}
 
 func NewStubCharacterManager() *StubCharacterManager {
@@ -71,7 +69,6 @@ func (s *StubCharacterManager) UpdateCharacterStats(ctx context.Context, charact
 	return nil
 }
 
-// StubRelationshipManager implements RelationshipManager with basic functionality
 type StubRelationshipManager struct {
 	relationships map[string]map[string]*domain.Relationship
 }
@@ -89,7 +86,6 @@ func (s *StubRelationshipManager) GetRelationship(ctx context.Context, playerID,
 		}
 	}
 
-	// Create new relationship if it doesn't exist
 	relationship := &domain.Relationship{
 		CharacterID:   characterID,
 		Affection:     0.0,
@@ -125,7 +121,6 @@ func (s *StubRelationshipManager) AddInteraction(ctx context.Context, playerID, 
 	relationship.History = append(relationship.History, *interaction)
 	relationship.UpdatedAt = time.Now()
 
-	// Apply effects to relationship
 	for _, effect := range interaction.Effects {
 		switch effect.Type {
 		case domain.EffectTypeAffection:
@@ -139,12 +134,10 @@ func (s *StubRelationshipManager) AddInteraction(ctx context.Context, playerID, 
 }
 
 func (s *StubRelationshipManager) CalculateCompatibility(ctx context.Context, player *domain.Player, character *domain.Character) (float64, error) {
-	// Simple compatibility calculation based on personality differences
 	opennessDiff := math.Abs(player.Personality.Openness - character.Personality.Openness)
 	extraversionDiff := math.Abs(player.Personality.Extraversion - character.Personality.Extraversion)
 	agreeablenessDiff := math.Abs(player.Personality.Agreeableness - character.Personality.Agreeableness)
 
-	// Lower differences = higher compatibility
 	totalDiff := opennessDiff + extraversionDiff + agreeablenessDiff
 	compatibility := math.Max(0, 100-totalDiff)
 
@@ -165,7 +158,6 @@ func (s *StubRelationshipManager) GetRelationshipHistory(ctx context.Context, pl
 	return interactions, nil
 }
 
-// StubEffectProcessor implements EffectProcessor with basic functionality
 type StubEffectProcessor struct{}
 
 func NewStubEffectProcessor() *StubEffectProcessor {
@@ -175,7 +167,6 @@ func NewStubEffectProcessor() *StubEffectProcessor {
 func (s *StubEffectProcessor) ApplyEffect(ctx context.Context, effect *domain.Effect, gameState *domain.GameState) error {
 	switch effect.Type {
 	case domain.EffectTypeAffection:
-		// Apply to player's relationship with target character
 		if relationship, exists := gameState.Player.Relationships[effect.Target]; exists {
 			relationship.Affection = math.Max(-100, math.Min(100, relationship.Affection+effect.Value))
 			gameState.Player.Relationships[effect.Target] = relationship
@@ -211,7 +202,6 @@ func (s *StubEffectProcessor) ValidateEffect(ctx context.Context, effect *domain
 }
 
 func (s *StubEffectProcessor) ReverseEffect(ctx context.Context, effect *domain.Effect, gameState *domain.GameState) error {
-	// Create a reversed effect
 	reversedEffect := &domain.Effect{
 		Type:        effect.Type,
 		Target:      effect.Target,
@@ -221,7 +211,6 @@ func (s *StubEffectProcessor) ReverseEffect(ctx context.Context, effect *domain.
 	return s.ApplyEffect(ctx, reversedEffect, gameState)
 }
 
-// StubRequirementChecker implements RequirementChecker with basic functionality
 type StubRequirementChecker struct{}
 
 func NewStubRequirementChecker() *StubRequirementChecker {
@@ -299,7 +288,6 @@ func (s *StubRequirementChecker) compareValues(actual, expected float64, operato
 	}
 }
 
-// StubConfigProvider implements ConfigProvider with sample data
 type StubConfigProvider struct{}
 
 func NewStubConfigProvider() *StubConfigProvider {

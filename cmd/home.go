@@ -7,7 +7,7 @@ import (
 func start(message string) {
 	TUIPrint(message)
 	loveMenu()
-	//characterBuild()
+	characterBuild()
 }
 
 func loveMenu() {

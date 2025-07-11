@@ -8,13 +8,11 @@ import (
 	"github.com/TuringProblem/CLIsland/internal/domain"
 )
 
-// MemoryStateRepository implements StateRepository with in-memory storage
 type MemoryStateRepository struct {
 	gameState *domain.GameState
 	mu        sync.RWMutex
 }
 
-// NewMemoryStateRepository creates a new in-memory state repository
 func NewMemoryStateRepository() *MemoryStateRepository {
 	return &MemoryStateRepository{}
 }
@@ -48,13 +46,11 @@ func (m *MemoryStateRepository) Exists(ctx context.Context) (bool, error) {
 	return m.gameState != nil, nil
 }
 
-// MemoryEventRepository implements EventRepository with in-memory storage
 type MemoryEventRepository struct {
 	events map[string]*domain.Event
 	mu     sync.RWMutex
 }
 
-// NewMemoryEventRepository creates a new in-memory event repository
 func NewMemoryEventRepository() *MemoryEventRepository {
 	return &MemoryEventRepository{
 		events: make(map[string]*domain.Event),
@@ -107,13 +103,11 @@ func (m *MemoryEventRepository) Delete(ctx context.Context, eventID string) erro
 	return nil
 }
 
-// MemoryCharacterRepository implements CharacterRepository with in-memory storage
 type MemoryCharacterRepository struct {
 	characters map[string]*domain.Character
 	mu         sync.RWMutex
 }
 
-// NewMemoryCharacterRepository creates a new in-memory character repository
 func NewMemoryCharacterRepository() *MemoryCharacterRepository {
 	return &MemoryCharacterRepository{
 		characters: make(map[string]*domain.Character),

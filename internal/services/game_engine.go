@@ -8,7 +8,6 @@ import (
 	"github.com/TuringProblem/CLIsland/internal/domain"
 )
 
-// GameEngineService implements the core game logic
 type GameEngineService struct {
 	stateRepo           domain.StateRepository
 	eventManager        domain.EventManager
@@ -19,7 +18,6 @@ type GameEngineService struct {
 	configProvider      domain.ConfigProvider
 }
 
-// NewGameEngineService creates a new game engine service
 func NewGameEngineService(
 	stateRepo domain.StateRepository,
 	eventManager domain.EventManager,
@@ -40,18 +38,16 @@ func NewGameEngineService(
 	}
 }
 
-// StartGame initializes a new game
 func (g *GameEngineService) StartGame(ctx context.Context, playerName string) (*domain.GameState, error) {
 	config, err := g.configProvider.GetGameConfig(ctx)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get game config: %w", err)
 	}
 
-	// Create player with default personality
 	player := &domain.Player{
 		ID:   generateID(),
 		Name: playerName,
-		Age:  25, // Default age
+		Age:  25,
 		Personality: domain.Personality{
 			Openness:          50.0,
 			Conscientiousness: 50.0,
@@ -73,13 +69,11 @@ func (g *GameEngineService) StartGame(ctx context.Context, playerName string) (*
 		UpdatedAt:       time.Now(),
 	}
 
-	// Load characters from config
 	characters, err := g.configProvider.GetCharacterConfigs(ctx)
 	if err != nil {
 		return nil, fmt.Errorf("failed to load characters: %w", err)
 	}
 
-	// Create character map
 	characterMap := make(map[string]*domain.Character)
 	for i := range characters {
 		if i >= config.MaxCharacters {
@@ -91,13 +85,11 @@ func (g *GameEngineService) StartGame(ctx context.Context, playerName string) (*
 		characterMap[characters[i].ID] = characters[i]
 	}
 
-	// Load events from config
 	events, err := g.configProvider.GetEventConfigs(ctx)
 	if err != nil {
 		return nil, fmt.Errorf("failed to load events: %w", err)
 	}
 
-	// Create event map
 	eventMap := make(map[string]*domain.Event)
 	for i := range events {
 		events[i].ID = generateID()
@@ -106,7 +98,6 @@ func (g *GameEngineService) StartGame(ctx context.Context, playerName string) (*
 		eventMap[events[i].ID] = events[i]
 	}
 
-	// Create initial game state
 	gameState := &domain.GameState{
 		Player:       player,
 		Characters:   characterMap,
@@ -117,7 +108,6 @@ func (g *GameEngineService) StartGame(ctx context.Context, playerName string) (*
 		Winner:       "",
 	}
 
-	// Save initial state
 	if err := g.stateRepo.Save(ctx, gameState); err != nil {
 		return nil, fmt.Errorf("failed to save initial game state: %w", err)
 	}
@@ -125,7 +115,6 @@ func (g *GameEngineService) StartGame(ctx context.Context, playerName string) (*
 	return gameState, nil
 }
 
-// ProcessChoice handles player choice and updates game state
 func (g *GameEngineService) ProcessChoice(ctx context.Context, choiceID string) (*domain.GameState, error) {
 	gameState, err := g.stateRepo.Load(ctx)
 	if err != nil {
@@ -136,7 +125,6 @@ func (g *GameEngineService) ProcessChoice(ctx context.Context, choiceID string) 
 		return nil, fmt.Errorf("no current event to process choice for")
 	}
 
-	// Find the choice
 	var selectedChoice *domain.Choice
 	for _, choice := range gameState.CurrentEvent.Choices {
 		if choice.ID == choiceID {
@@ -149,7 +137,6 @@ func (g *GameEngineService) ProcessChoice(ctx context.Context, choiceID string) 
 		return nil, fmt.Errorf("choice with ID %s not found", choiceID)
 	}
 
-	// Check requirements
 	if len(selectedChoice.Requirements) > 0 {
 		requirements := make([]*domain.Requirement, len(selectedChoice.Requirements))
 		for i := range selectedChoice.Requirements {
@@ -164,7 +151,6 @@ func (g *GameEngineService) ProcessChoice(ctx context.Context, choiceID string) 
 		}
 	}
 
-	// Apply effects
 	effects := make([]*domain.Effect, len(selectedChoice.Effects))
 	for i := range selectedChoice.Effects {
 		effects[i] = &selectedChoice.Effects[i]
@@ -173,10 +159,8 @@ func (g *GameEngineService) ProcessChoice(ctx context.Context, choiceID string) 
 		return nil, fmt.Errorf("failed to apply choice effects: %w", err)
 	}
 
-	// Update player timestamp
 	gameState.Player.UpdatedAt = time.Now()
 
-	// Save updated state
 	if err := g.stateRepo.Save(ctx, gameState); err != nil {
 		return nil, fmt.Errorf("failed to save game state: %w", err)
 	}
@@ -184,7 +168,6 @@ func (g *GameEngineService) ProcessChoice(ctx context.Context, choiceID string) 
 	return gameState, nil
 }
 
-// AdvanceDay progresses the game to the next day
 func (g *GameEngineService) AdvanceDay(ctx context.Context) (*domain.GameState, error) {
 	gameState, err := g.stateRepo.Load(ctx)
 	if err != nil {
@@ -196,21 +179,17 @@ func (g *GameEngineService) AdvanceDay(ctx context.Context) (*domain.GameState, 
 		return nil, fmt.Errorf("failed to get game config: %w", err)
 	}
 
-	// Check if game should end
 	if gameState.GameDay >= config.MaxDays {
 		gameState.IsGameOver = true
 		gameState.Winner = determineWinner(gameState)
 		return gameState, nil
 	}
 
-	// Advance day
 	gameState.GameDay++
 	gameState.Player.Stats.DayNumber = gameState.GameDay
 
-	// Regenerate some energy
 	gameState.Player.Stats.Energy = min(100.0, gameState.Player.Stats.Energy+20.0)
 
-	// Update character stats
 	for _, character := range gameState.Characters {
 		if character.IsAvailable {
 			character.Stats.Energy = min(100.0, character.Stats.Energy+15.0)
@@ -218,14 +197,12 @@ func (g *GameEngineService) AdvanceDay(ctx context.Context) (*domain.GameState, 
 		}
 	}
 
-	// Generate new event for the day
 	newEvent, err := g.generateDailyEvent(ctx, gameState)
 	if err != nil {
 		return nil, fmt.Errorf("failed to generate daily event: %w", err)
 	}
 	gameState.CurrentEvent = newEvent
 
-	// Save updated state
 	if err := g.stateRepo.Save(ctx, gameState); err != nil {
 		return nil, fmt.Errorf("failed to save game state: %w", err)
 	}
@@ -233,7 +210,6 @@ func (g *GameEngineService) AdvanceDay(ctx context.Context) (*domain.GameState, 
 	return gameState, nil
 }
 
-// EndGame marks the game as finished
 func (g *GameEngineService) EndGame(ctx context.Context) error {
 	gameState, err := g.stateRepo.Load(ctx)
 	if err != nil {
@@ -246,12 +222,10 @@ func (g *GameEngineService) EndGame(ctx context.Context) error {
 	return g.stateRepo.Save(ctx, gameState)
 }
 
-// GetCurrentState returns the current game state
 func (g *GameEngineService) GetCurrentState(ctx context.Context) (*domain.GameState, error) {
 	return g.stateRepo.Load(ctx)
 }
 
-// SaveGame persists the current game state
 func (g *GameEngineService) SaveGame(ctx context.Context) error {
 	gameState, err := g.stateRepo.Load(ctx)
 	if err != nil {
@@ -261,12 +235,10 @@ func (g *GameEngineService) SaveGame(ctx context.Context) error {
 	return g.stateRepo.Save(ctx, gameState)
 }
 
-// LoadGame loads a saved game state
 func (g *GameEngineService) LoadGame(ctx context.Context) (*domain.GameState, error) {
 	return g.stateRepo.Load(ctx)
 }
 
-// GetAvailableEvents returns events that can be triggered
 func (g *GameEngineService) GetAvailableEvents(ctx context.Context) ([]*domain.Event, error) {
 	gameState, err := g.stateRepo.Load(ctx)
 	if err != nil {
@@ -276,7 +248,6 @@ func (g *GameEngineService) GetAvailableEvents(ctx context.Context) ([]*domain.E
 	var availableEvents []*domain.Event
 	for _, event := range gameState.Events {
 		if event.IsActive {
-			// Check if event requirements are met
 			if len(event.Requirements) > 0 {
 				requirements := make([]*domain.Requirement, len(event.Requirements))
 				for i := range event.Requirements {
@@ -298,7 +269,6 @@ func (g *GameEngineService) GetAvailableEvents(ctx context.Context) ([]*domain.E
 	return availableEvents, nil
 }
 
-// TriggerEvent activates a specific event
 func (g *GameEngineService) TriggerEvent(ctx context.Context, eventID string) (*domain.GameState, error) {
 	gameState, err := g.stateRepo.Load(ctx)
 	if err != nil {
@@ -314,7 +284,6 @@ func (g *GameEngineService) TriggerEvent(ctx context.Context, eventID string) (*
 		return nil, fmt.Errorf("event %s is not active", eventID)
 	}
 
-	// Check requirements
 	if len(event.Requirements) > 0 {
 		requirements := make([]*domain.Requirement, len(event.Requirements))
 		for i := range event.Requirements {
@@ -331,7 +300,6 @@ func (g *GameEngineService) TriggerEvent(ctx context.Context, eventID string) (*
 
 	gameState.CurrentEvent = event
 
-	// Save updated state
 	if err := g.stateRepo.Save(ctx, gameState); err != nil {
 		return nil, fmt.Errorf("failed to save game state: %w", err)
 	}
@@ -339,7 +307,6 @@ func (g *GameEngineService) TriggerEvent(ctx context.Context, eventID string) (*
 	return gameState, nil
 }
 
-// GetAvailableCharacters returns characters that can be interacted with
 func (g *GameEngineService) GetAvailableCharacters(ctx context.Context) ([]*domain.Character, error) {
 	gameState, err := g.stateRepo.Load(ctx)
 	if err != nil {
@@ -356,7 +323,6 @@ func (g *GameEngineService) GetAvailableCharacters(ctx context.Context) ([]*doma
 	return availableCharacters, nil
 }
 
-// InteractWithCharacter handles character interactions
 func (g *GameEngineService) InteractWithCharacter(ctx context.Context, characterID string, interactionType domain.InteractionType) (*domain.GameState, error) {
 	gameState, err := g.stateRepo.Load(ctx)
 	if err != nil {
@@ -372,7 +338,6 @@ func (g *GameEngineService) InteractWithCharacter(ctx context.Context, character
 		return nil, fmt.Errorf("character %s is not available", characterID)
 	}
 
-	// Create interaction
 	interaction := &domain.Interaction{
 		Type:        interactionType,
 		Description: generateInteractionDescription(interactionType, character.Name),
@@ -380,12 +345,10 @@ func (g *GameEngineService) InteractWithCharacter(ctx context.Context, character
 		Timestamp:   time.Now(),
 	}
 
-	// Add interaction to relationship history
 	if err := g.relationshipManager.AddInteraction(ctx, gameState.Player.ID, characterID, interaction); err != nil {
 		return nil, fmt.Errorf("failed to add interaction: %w", err)
 	}
 
-	// Apply effects
 	effects := make([]*domain.Effect, len(interaction.Effects))
 	for i := range interaction.Effects {
 		effects[i] = &interaction.Effects[i]
@@ -394,7 +357,6 @@ func (g *GameEngineService) InteractWithCharacter(ctx context.Context, character
 		return nil, fmt.Errorf("failed to apply interaction effects: %w", err)
 	}
 
-	// Save updated state
 	if err := g.stateRepo.Save(ctx, gameState); err != nil {
 		return nil, fmt.Errorf("failed to save game state: %w", err)
 	}
@@ -402,14 +364,11 @@ func (g *GameEngineService) InteractWithCharacter(ctx context.Context, character
 	return gameState, nil
 }
 
-// Helper functions
-
 func generateID() string {
 	return fmt.Sprintf("%d", time.Now().UnixNano())
 }
 
 func determineWinner(gameState *domain.GameState) string {
-	// Simple winner determination based on popularity
 	var winner string
 	maxPopularity := -1.0
 
@@ -424,7 +383,6 @@ func determineWinner(gameState *domain.GameState) string {
 }
 
 func (g *GameEngineService) generateDailyEvent(ctx context.Context, gameState *domain.GameState) (*domain.Event, error) {
-	// Simple event generation based on game day
 	config, err := g.configProvider.GetGameConfig(ctx)
 	if err != nil {
 		return nil, err
@@ -444,14 +402,12 @@ func (g *GameEngineService) generateDailyEvent(ctx context.Context, gameState *d
 		eventType = domain.EventTypeDrama
 	}
 
-	// Find an event of the appropriate type
 	for _, event := range gameState.Events {
 		if event.Type == eventType && event.IsActive {
 			return event, nil
 		}
 	}
 
-	// Fallback to any available event
 	for _, event := range gameState.Events {
 		if event.IsActive {
 			return event, nil

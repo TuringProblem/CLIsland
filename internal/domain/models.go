@@ -4,7 +4,6 @@ import (
 	"time"
 )
 
-// Player represents the main character in the game
 type Player struct {
 	ID              string                  `json:"id"`
 	Name            string                  `json:"name"`
@@ -18,7 +17,6 @@ type Player struct {
 	UpdatedAt       time.Time               `json:"updated_at"`
 }
 
-// Character represents other contestants in the villa
 type Character struct {
 	ID          string         `json:"id"`
 	Name        string         `json:"name"`
@@ -30,7 +28,6 @@ type Character struct {
 	CreatedAt   time.Time      `json:"created_at"`
 }
 
-// Event represents a game event or challenge
 type Event struct {
 	ID           string        `json:"id"`
 	Title        string        `json:"title"`
@@ -44,7 +41,6 @@ type Event struct {
 	CreatedAt    time.Time     `json:"created_at"`
 }
 
-// Choice represents a player decision point
 type Choice struct {
 	ID           string        `json:"id"`
 	Text         string        `json:"text"`
@@ -53,7 +49,6 @@ type Choice struct {
 	Requirements []Requirement `json:"requirements"`
 }
 
-// Outcome represents the result of an event or choice
 type Outcome struct {
 	ID          string   `json:"id"`
 	Title       string   `json:"title"`
@@ -62,7 +57,6 @@ type Outcome struct {
 	NextEventID string   `json:"next_event_id,omitempty"`
 }
 
-// Effect represents a change to game state
 type Effect struct {
 	Type        EffectType `json:"type"`
 	Target      string     `json:"target"`
@@ -70,7 +64,6 @@ type Effect struct {
 	Description string     `json:"description"`
 }
 
-// Relationship represents the connection between characters
 type Relationship struct {
 	CharacterID   string             `json:"character_id"`
 	Affection     float64            `json:"affection"`     // -100 to 100
@@ -81,7 +74,6 @@ type Relationship struct {
 	UpdatedAt     time.Time          `json:"updated_at"`
 }
 
-// Interaction represents a single interaction between characters
 type Interaction struct {
 	Type        InteractionType `json:"type"`
 	Description string          `json:"description"`
@@ -89,7 +81,6 @@ type Interaction struct {
 	Timestamp   time.Time       `json:"timestamp"`
 }
 
-// Personality represents character traits
 type Personality struct {
 	Openness          float64 `json:"openness"`          // 0-100
 	Conscientiousness float64 `json:"conscientiousness"` // 0-100
@@ -98,7 +89,6 @@ type Personality struct {
 	Neuroticism       float64 `json:"neuroticism"`       // 0-100
 }
 
-// Appearance represents physical characteristics
 type Appearance struct {
 	Height    int    `json:"height"`
 	Build     string `json:"build"`
@@ -107,7 +97,6 @@ type Appearance struct {
 	Style     string `json:"style"`
 }
 
-// PlayerStats represents player's current stats
 type PlayerStats struct {
 	Popularity float64 `json:"popularity"` // 0-100
 	Confidence float64 `json:"confidence"` // 0-100
@@ -116,14 +105,12 @@ type PlayerStats struct {
 	DayNumber  int     `json:"day_number"`
 }
 
-// CharacterStats represents character's current stats
 type CharacterStats struct {
 	Popularity float64 `json:"popularity"` // 0-100
 	Energy     float64 `json:"energy"`     // 0-100
 	Stress     float64 `json:"stress"`     // 0-100
 }
 
-// Item represents collectible items
 type Item struct {
 	ID          string   `json:"id"`
 	Name        string   `json:"name"`
@@ -132,7 +119,6 @@ type Item struct {
 	Value       int      `json:"value"`
 }
 
-// Requirement represents conditions that must be met
 type Requirement struct {
 	Type     RequirementType `json:"type"`
 	Target   string          `json:"target"`
@@ -140,7 +126,6 @@ type Requirement struct {
 	Operator string          `json:"operator"` // "eq", "gt", "lt", "gte", "lte"
 }
 
-// Enums
 type EventType string
 
 const (
