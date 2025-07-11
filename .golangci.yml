@@ -23,11 +23,18 @@ linters:
     - unparam
     - whitespace
 
+linters-settings:
+  revive:
+    rules:
+      - name: package-comments
+        disabled: true
+      - name: exported
+        disabled: true
+
 issues:
   exclude-use-default: false
   max-issues-per-linter: 0
   max-same-issues: 0
 
 output:
-  formats:
-    - colored-line-number 
+  format: colored-line-number 
