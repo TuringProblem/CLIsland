@@ -6,9 +6,16 @@ import (
 
 func start(message string) {
 	TUIPrint(message)
-	characterBuild()
+	loveMenu()
+	//characterBuild()
 }
 
+func loveMenu() {
+	TUIPrint(CLEAR_SCREEN + HOME)
+	for _, v := range getSectionPrompts["main_menu"] {
+		TUIPrint(v)
+	}
+}
 func characterBuild() {
 	TUIPrint(CLEAR_SCREEN)
 	for k, v := range getSectionPrompts["character"] {
@@ -17,7 +24,7 @@ func characterBuild() {
 		}
 	}
 	examplePerson := createExamplePerson()
-	TUIPrint(CLEAR_SCREEN)
+
 	examplePerson.PrintPersonInterestsPretty()
 
 }

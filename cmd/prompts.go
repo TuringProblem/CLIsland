@@ -8,4 +8,10 @@ var getSectionPrompts map[string]map[string]string = map[string]map[string]strin
 		"weight": "What is your weight?",
 		"sex":    "What is your sex?",
 	},
+	"main_menu": {
+		"header":       "Welcome to Love Island!",
+		"option_one":   "[1]: Start",
+		"option_two":   "[2]: Settings",
+		"option_three": "[3]: Exit",
+	},
 }

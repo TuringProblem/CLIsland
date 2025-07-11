@@ -29,10 +29,13 @@ const (
 )
 
 const (
-	Bold    = "\033[1m"
-	Faint   = "\033[2m"
-	Italic  = "\033[3m"
-	Under   = "\033[4m"
-	Blink   = "\033[5m"
-	Reverse = "\033[7m"
+	Bold         = "\033[1m"
+	Faint        = "\033[2m"
+	ITALIC       = "\033[3m"
+	UNDER        = "\033[4m"
+	BLINK        = "\033[5m"
+	REVERSE      = "\033[7m"
+	RES          = "\033[0m"
+	HOME         = "\033[H"
+	CLEAR_SCREEN = "\033[2J"
 )

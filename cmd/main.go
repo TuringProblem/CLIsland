@@ -6,8 +6,6 @@ import (
 	//"time"
 )
 
-const CLEAR_SCREEN = "\033[2J"
-
 func main() {
 	printTag()
 	initialize()

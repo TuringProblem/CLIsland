@@ -24,6 +24,11 @@ const (
 	Swimming Interest = "Swimming"
 	Gaming   Interest = "Gaming"
 	Lifting  Interest = "Lifting"
+	Cooking  Interest = "Cooking"
+	Cleaning Interest = "Cleaning"
+	Shopping Interest = "Shopping"
+	Partying Interest = "Partying"
+	Sleeping Interest = "Sleeping"
 )
 
 type Interests struct {
@@ -70,33 +75,35 @@ func (p *Person) GetInterests() []Interest {
 	return interests
 }
 func (p *Person) PrintPersonInterestsPretty() {
+	TUIPrint("[=== Interests ===]")
 	for k, v := range p.Interests.InterestType {
-		fmt.Printf("%s\n%s%s\n", k, printAsBlock(v), ResetBackground)
+		fmt.Printf("%s[ %s ]%s\n%s%s\n", UNDER, k, RES, printAsBlock(v), ResetBackground)
 	}
 }
 
 func printAsBlock(interestWeight int) string {
-	var output string
 	switch interestWeight {
 	case 1:
-		output = fmt.Sprintf("[ %s█%s | | | | | | ]", Green, Reset)
-		return output
+		return fmt.Sprintf("[ %s█%s | | | | | | | | | ]", Green, Reset)
 	case 2:
-		output = fmt.Sprintf("[ %s█ █%s | | | | | ]", Green, Reset)
-		return output
+		return fmt.Sprintf("[ %s█ █%s | | | | | | | | ]", Green, Reset)
 	case 3:
-		output = fmt.Sprintf("[ %s█ █ █%s | | | | ]", Green, Reset)
-		return output
+		return fmt.Sprintf("[ %s█ █ █%s | | | | | | | ]", Green, Reset)
 	case 4:
-		output = fmt.Sprintf("[ %s█ █ █ █%s | | | ]", Green, Reset)
-		return output
+		return fmt.Sprintf("[ %s█ █ █ █%s | | | | | | ]", Green, Reset)
 	case 5:
-		output = fmt.Sprintf("[ %s█ █ █ █ █%s | | ]", Green, Reset)
-		return output
+		return fmt.Sprintf("[ %s█ █ █ █ █%s | | | | | ]", Green, Reset)
 	case 6:
-		output = fmt.Sprintf("[ %s█ █ █ █ █ █%s ]", Green, Reset)
-		return output
+		return fmt.Sprintf("[ %s█ █ █ █ █ █%s | | | | ]", Green, Reset)
+	case 7:
+		return fmt.Sprintf("[ %s█ █ █ █ █ █ █%s | | | ]", Green, Reset)
+	case 8:
+		return fmt.Sprintf("[ %s█ █ █ █ █ █ █ █%s | | ]", Green, Reset)
+	case 9:
+		return fmt.Sprintf("[ %s█ █ █ █ █ █ █ █ █%s | ]", Green, Reset)
+	case 10:
+		return fmt.Sprintf("[ %s█ █ █ █ █ █ █ █ █ █%s ]", Green, Reset)
 	default:
-		return "[ | | | | | | | ]"
+		return "[ | | | | | | | | | | ]"
 	}
 }
