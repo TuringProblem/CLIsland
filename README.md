@@ -21,7 +21,7 @@ CLIsland is a command-line, single-player narrative game inspired by Love Island
 ## Getting Started
 
 ### Prerequisites
-- Go 1.20+
+- Go 1.23+
 - (Optional) [golangci-lint](https://golangci-lint.run/)
 
 ### Quick Start
