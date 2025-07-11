@@ -3,7 +3,7 @@
 BINARY=clisland
 PKG=./...
 
-.PHONY: all build run test lint fmt coverage
+.PHONY: all build run test fmt coverage
 
 all: build
 
@@ -15,9 +15,6 @@ run:
 
 test:
 	go test -v $(PKG)
-
-lint:
-	golangci-lint run
 
 fmt:
 	gofmt -s -w .

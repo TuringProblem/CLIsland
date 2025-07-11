@@ -64,11 +64,8 @@ go test ./internal/services/
 make coverage
 ```
 
-### Linting & Formatting
+### Formatting
 ```bash
-# Lint the code
-make lint
-
 # Format the code
 make fmt
 ```
@@ -109,9 +106,7 @@ CLIsland/
 ├── data/                    # Game data (names, config, etc.)
 ├── utils/                   # Utility functions
 ├── scripts/                 # DevOps and helper scripts
-├── Makefile                 # Build, test, and lint commands
-├── .golangci.yml           # Linting configuration
-└── .github/workflows/ci.yml # CI/CD pipeline
+└── Makefile                 # Build, test, and format commands
 ```
 
 ## Architecture
@@ -137,10 +132,8 @@ CLIsland/
 - **MemoryEventRepository**: In-memory event storage
 - **MemoryCharacterRepository**: In-memory character storage
 
-## DevOps & CI
-- **CI**: GitHub Actions workflow runs tests, linting, and coverage on every push/PR
-- **Makefile**: Common tasks for build, lint, test, and coverage
-- **Linting**: Uses `golangci-lint` for comprehensive static analysis
+## Development Tools
+- **Makefile**: Common tasks for build, test, and coverage
 - **Testing**: Unit tests with good coverage of core functionality
 
 ## Extending the Game
