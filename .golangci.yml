@@ -9,11 +9,8 @@ linters:
     - staticcheck
     - gosimple
     - unused
-    - structcheck
-    - deadcode
     - ineffassign
     - typecheck
-    - varcheck
     - gofmt
     - goimports
     - misspell
@@ -32,4 +29,4 @@ issues:
   max-same-issues: 0
 
 output:
-  format: colored-line 
+  format: colored-line-number 
