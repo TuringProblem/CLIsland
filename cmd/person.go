@@ -81,6 +81,7 @@ func (p *Person) PrintPersonInterestsPretty() {
 	}
 }
 
+// TODO: Figure out a more clever way to solve this -> feel like maybe a for loop... even a map
 func printAsBlock(interestWeight int) string {
 	switch interestWeight {
 	case 1:
