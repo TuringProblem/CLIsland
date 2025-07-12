@@ -17,10 +17,13 @@ func setMode(mode int) {
 	case 2:
 		TUIPrint(DEV_MODE)
 	default:
-		TUIPrint(PROD)
+		TUIPrint(composeMessage(PROD))
 	}
 }
 func TUIPrint(message string) { fmt.Println(message) } // THIS IS THE MAIN PRINTING FUNCTION (JUST A WRAPPER AYO)
+func composeMessage(message string) string {
+	return GreenBackground + message + ResetBackground
+}
 func getTag() string          { return GreenBackground + "Deveoped by: @Override" + ResetBackground }
 func printTag()               { TUIPrint(getTag()) }
 func iGotATeeeexxxt() string  { return "📱 I GOT A TEEEEEEEEEEXT!!!!!\n" }
