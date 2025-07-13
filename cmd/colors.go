@@ -29,13 +29,14 @@ const (
 )
 
 const (
-	Bold         = "\033[1m"
-	Faint        = "\033[2m"
-	ITALIC       = "\033[3m"
-	UNDER        = "\033[4m"
-	BLINK        = "\033[5m"
-	REVERSE      = "\033[7m"
-	RES          = "\033[0m"
-	HOME         = "\033[H"
-	CLEAR_SCREEN = "\033[2J"
+	Bold           = "\033[1m"
+	Faint          = "\033[2m"
+	ITALIC         = "\033[3m"
+	UNDER          = "\033[4m"
+	BLINK          = "\033[5m"
+	REVERSE        = "\033[7m"
+	RES            = "\033[0m"
+	HOME           = "\033[H"
+	CLEAR_SCREEN   = "\033[2J"
+	CLEAR_AND_HOME = "\033[2J\033[H"
 )

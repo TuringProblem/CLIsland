@@ -14,4 +14,10 @@ var getSectionPrompts map[string]map[string]string = map[string]map[string]strin
 		"option_two":   "[2]: Settings",
 		"option_three": "[3]: Exit",
 	},
+	"settings": {
+		"header": "Settings",
+	},
+	"intro": {
+		"header": "Welcome to Love Island!",
+	},
 }

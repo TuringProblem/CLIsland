@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"math/rand"
 )
 
 type Sex string
@@ -40,8 +41,48 @@ type Person struct {
 	Age       int
 	Height    float64 // inches
 	Weight    float64
-	sex       Sex
+	Sex       Sex
 	Interests Interests
+}
+
+func createRandomPerson() Person {
+	myPerson := Person{
+		Name:   "",
+		Age:    rand.Intn(100),
+		Height: rand.Float64() * 100,
+		Weight: rand.Float64() * 100,
+		Sex:    getRandomSex(),
+		Interests: Interests{
+			InterestType: map[Interest]int{
+				Music:   rand.Intn(10),
+				Sports:  rand.Intn(10),
+				Reading: rand.Intn(10),
+				Writing: rand.Intn(10),
+				Coding:  rand.Intn(10),
+				Art:     rand.Intn(10),
+				Travel:  rand.Intn(10),
+			},
+		},
+	}
+	myPerson.Name = getRandomName(myPerson.Sex)
+	return myPerson
+}
+func getRandomSex() Sex {
+	randomValue := rand.Intn(2)
+	if randomValue == 0 {
+		return Male
+	} else {
+		return Female
+	}
+}
+
+func getRandomName(sex Sex) string {
+	// TODO: figure out how to use my txt files from `/data/names.txt` to get a random name
+	if sex == Male {
+		return "Chris"
+	} else {
+		return "Huda"
+	}
 }
 
 func createExamplePerson() Person {
@@ -50,7 +91,7 @@ func createExamplePerson() Person {
 		Age:    30, //can't be below 18
 		Height: 73, // TODO: Need to make a converter to go from inches to ft. :) && also to cm for UK brev
 		Weight: 70,
-		sex:    Male,
+		Sex:    getRandomSex(),
 		Interests: Interests{
 			InterestType: map[Interest]int{
 				Music:   5,

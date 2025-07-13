@@ -34,7 +34,7 @@ func which(option int) {
 	case 2:
 		TUIPrint(CLEAR_SCREEN)
 		setMode(2)
-		start(iGotATeeeexxxt())
+		start(createRandomPerson())
 	default:
 		fail()
 	}

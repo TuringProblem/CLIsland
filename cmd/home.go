@@ -2,35 +2,51 @@ package main
 
 import (
 	"fmt"
+	"os"
+	"sort"
+	"time"
 )
 
-func start(message string) {
-	TUIPrint(message)
+var myPrompts []string
+
+func start(person Person) {
+	TUIPrint(CLEAR_SCREEN + HOME)
+	TUIPrint(person.Name)
+	person.PrintPersonInterestsPretty()
+
+	time.Sleep(time.Duration(3) * time.Second)
 	loveMenu()
 }
 
 func loveMenu() {
-	TUIPrint(CLEAR_SCREEN + HOME)
-	for _, v := range getSectionPrompts["main_menu"] {
+	TUIPrint(CLEAR_AND_HOME)
+	myPrompts = addPromptAndSort(getSectionPrompts["main_menu"])
+	for _, v := range myPrompts {
 		TUIPrint(v)
 	}
 	var input int
-	for input != 3 {
-		TUIPrint("Please select an option: ")
-		fmt.Scan(&input)
-		if input == 1 {
-			characterBuild()
-			break
-		} else if input == 2 {
-			fmt.Println("Not implemented yet")
-			//loveMenu()
-		} else if input == 3 {
-			break
-		}
+	handLoveMenuInput(input)
+
+}
+
+func handLoveMenuInput(input int) {
+	TUIPrint("Please select an option:")
+	fmt.Scan(&input)
+	switch input {
+	case 1:
+		characterBuild()
+	case 2:
+		//settingsBuild()
+		TUIPrint(CLEAR_AND_HOME)
+	case 3:
+		os.Exit(0)
+	default:
+		fail()
 	}
 }
+
 func characterBuild() {
-	TUIPrint(CLEAR_SCREEN)
+	TUIPrint(CLEAR_AND_HOME)
 	for k, v := range getSectionPrompts["character"] {
 		if k == "sex" {
 			handlePromptIterator(v)
@@ -41,6 +57,7 @@ func characterBuild() {
 	examplePerson.PrintPersonInterestsPretty()
 
 }
+
 func handlePromptIterator(prompt string) int {
 	var response int
 	TUIPrint(prompt)
@@ -51,4 +68,14 @@ func handlePromptIterator(prompt string) int {
 	}
 
 	return response
+}
+
+func addPromptAndSort(prompt map[string]string) []string {
+	for _, v := range prompt {
+		myPrompts = append(myPrompts, v)
+	}
+	sort.Slice(myPrompts, func(i, j int) bool {
+		return myPrompts[i] < myPrompts[j]
+	})
+	return myPrompts
 }
