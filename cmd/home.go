@@ -10,16 +10,19 @@ import (
 var myPrompts []string
 
 func start(person Person) {
-	TUIPrint(CLEAR_SCREEN + HOME)
+	TUIPrint(iGOTATEEEEEXT)
 	TUIPrint(person.Name)
 	person.PrintPersonInterestsPretty()
+	time.Sleep(time.Duration(3) * time.Second)
+	TUIPrint(CLEAR_SCREEN + HOME)
 
 	time.Sleep(time.Duration(3) * time.Second)
+
 	loveMenu()
 }
 
 func loveMenu() {
-	TUIPrint(CLEAR_AND_HOME)
+	TUIPrint(CLEAR_SCREEN + HOME)
 	myPrompts = addPromptAndSort(getSectionPrompts["main_menu"])
 	for _, v := range myPrompts {
 		TUIPrint(v)
@@ -37,7 +40,8 @@ func handLoveMenuInput(input int) {
 		characterBuild()
 	case 2:
 		//settingsBuild()
-		TUIPrint(CLEAR_AND_HOME)
+		TUIPrint(CLEAR_SCREEN + HOME)
+		loveMenu()
 	case 3:
 		os.Exit(0)
 	default:
@@ -46,16 +50,11 @@ func handLoveMenuInput(input int) {
 }
 
 func characterBuild() {
-	TUIPrint(CLEAR_AND_HOME)
+	TUIPrint(CLEAR_SCREEN + HOME)
 	for k, v := range getSectionPrompts["character"] {
 		if k == "sex" {
-			handlePromptIterator(v)
-		}
+    myValue := handlePromptIterator(v)
 	}
-	examplePerson := createExamplePerson()
-
-	examplePerson.PrintPersonInterestsPretty()
-
 }
 
 func handlePromptIterator(prompt string) int {
@@ -66,7 +65,6 @@ func handlePromptIterator(prompt string) int {
 	if err == nil {
 		fmt.Errorf("Seems to be an error with %d", response)
 	}
-
 	return response
 }
 

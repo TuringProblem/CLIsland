@@ -45,6 +45,30 @@ type Person struct {
 	Interests Interests
 }
 
+func createPerson() *Person {
+	myPerson := Person{
+		Name: buildName(getRandomSex()),
+	}
+	return &myPerson
+}
+
+func buildPerson() Person {
+	p := Person{}
+	p.Sex, _ = setSexForBuild(p.mySexAsInt())
+	p.Name = selectName(p.Sex)
+	p.Age = agePrompt()
+	p.Height, p.Weight = heightWeightPrompt()
+	return p
+}
+
+func (p *Person) mySexAsInt() int {
+	if p.Sex == Male {
+		return 1
+	} else {
+		return 2
+	}
+}
+
 func createRandomPerson() Person {
 	myPerson := Person{
 		Name:   "",
@@ -64,7 +88,7 @@ func createRandomPerson() Person {
 			},
 		},
 	}
-	myPerson.Name = getRandomName(myPerson.Sex)
+	myPerson.Name = selectName(myPerson.Sex)
 	return myPerson
 }
 func getRandomSex() Sex {
@@ -73,15 +97,6 @@ func getRandomSex() Sex {
 		return Male
 	} else {
 		return Female
-	}
-}
-
-func getRandomName(sex Sex) string {
-	// TODO: figure out how to use my txt files from `/data/names.txt` to get a random name
-	if sex == Male {
-		return "Chris"
-	} else {
-		return "Huda"
 	}
 }
 

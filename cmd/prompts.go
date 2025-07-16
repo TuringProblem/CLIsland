@@ -1,5 +1,7 @@
 package main
 
+import "fmt"
+
 var getSectionPrompts map[string]map[string]string = map[string]map[string]string{
 	"character": {
 		"name":   "What is your name?",
@@ -20,4 +22,18 @@ var getSectionPrompts map[string]map[string]string = map[string]map[string]strin
 	"intro": {
 		"header": "Welcome to Love Island!",
 	},
+}
+
+func namePrompt() string {
+	var name string
+	TUIPrint("What is your name?")
+	fmt.Scanln(&name)
+	return name
+}
+
+func agePrompt() int {
+	var age int
+	TUIPrint("What is your age?")
+	fmt.Scanln(&age)
+	return age
 }
