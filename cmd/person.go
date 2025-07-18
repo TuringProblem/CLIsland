@@ -56,7 +56,7 @@ func buildPerson() Person {
 	p := Person{}
 	p.Sex, _ = setSexForBuild(p.mySexAsInt())
 	p.Name = selectName(p.Sex)
-	p.Age = agePrompt()
+	p.Age = rand.Intn(100)
 	p.Height, p.Weight = heightWeightPrompt()
 	return p
 }

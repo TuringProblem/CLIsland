@@ -13,10 +13,10 @@ func start(person Person) {
 	TUIPrint(iGOTATEEEEEXT)
 	TUIPrint(person.Name)
 	person.PrintPersonInterestsPretty()
-	time.Sleep(time.Duration(3) * time.Second)
+	time.Sleep(time.Duration(2) * time.Second)
 	TUIPrint(CLEAR_SCREEN + HOME)
 
-	time.Sleep(time.Duration(3) * time.Second)
+	time.Sleep(time.Duration(2) * time.Second)
 
 	loveMenu()
 }
@@ -27,17 +27,22 @@ func loveMenu() {
 	for _, v := range myPrompts {
 		TUIPrint(v)
 	}
-	var input int
-	handLoveMenuInput(input)
+	handLoveMenuInput()
 
 }
 
-func handLoveMenuInput(input int) {
+func handLoveMenuInput() {
+	var input int
 	TUIPrint("Please select an option:")
-	fmt.Scan(&input)
-	switch input {
+	myValue, err := fmt.Scanln(&input)
+	if err != nil {
+		fmt.Println("Error reading input:", err)
+		os.Exit(1)
+	}
+	switch myValue {
 	case 1:
 		characterBuild()
+		break
 	case 2:
 		//settingsBuild()
 		TUIPrint(CLEAR_SCREEN + HOME)
@@ -51,21 +56,14 @@ func handLoveMenuInput(input int) {
 
 func characterBuild() {
 	TUIPrint(CLEAR_SCREEN + HOME)
-	for k, v := range getSectionPrompts["character"] {
-		if k == "sex" {
-    myValue := handlePromptIterator(v)
-	}
-}
+	// build character by each part
 
-func handlePromptIterator(prompt string) int {
-	var response int
-	TUIPrint(prompt)
-	success("Please Select:\n[1] male [2] female")
-	response, err := fmt.Scan(&response)
-	if err == nil {
-		fmt.Errorf("Seems to be an error with %d", response)
-	}
-	return response
+	// sex
+	mySex := buildSex()
+	fmt.Println(mySex)
+
+	// name
+
 }
 
 func addPromptAndSort(prompt map[string]string) []string {

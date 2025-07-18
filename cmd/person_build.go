@@ -28,11 +28,31 @@ func heightWeightPrompt() (float64, float64) {
 	return height, weight
 }
 
-func agePrompt() int {
-	var age int
-	TUIPrint("What is your age?")
-	fmt.Scanln(&age)
-	return age
+func buildSex() Sex {
+	var sex Sex
+	TUIPrint(getSectionPrompts["character"]["sex"])
+	sex = sexConversion(&sex)
+	return sex
+}
+
+func sexConversion(sex *Sex) Sex {
+	var input int
+	input = intConversion(input)
+	if input == 1 {
+		*sex = Male
+		return *sex
+	} else {
+		*sex = Female
+		return *sex
+	}
+}
+
+func intConversion(input int) int {
+	response, err := fmt.Scan(&input)
+	if err == nil {
+		fmt.Errorf("Seems to be an error with %d", response)
+	}
+	return input
 }
 
 func printNameList(sex Sex) {
