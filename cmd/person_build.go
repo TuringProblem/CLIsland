@@ -28,6 +28,13 @@ func heightWeightPrompt() (float64, float64) {
 	return height, weight
 }
 
+func buildName() string {
+	var name string
+	TUIPrint(getSectionPrompts["character"]["name"])
+	fmt.Scanln(&name)
+	return name
+}
+
 func buildSex() Sex {
 	var sex Sex
 	TUIPrint(getSectionPrompts["character"]["sex"])
