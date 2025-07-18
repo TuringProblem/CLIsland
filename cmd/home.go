@@ -42,7 +42,6 @@ func handLoveMenuInput() {
 	switch myValue {
 	case 1:
 		characterBuild()
-		break
 	case 2:
 		//settingsBuild()
 		TUIPrint(CLEAR_SCREEN + HOME)
@@ -63,6 +62,27 @@ func characterBuild() {
 	fmt.Println(mySex)
 
 	// name
+	name := buildNameExample()
+	fmt.Println(name)
+
+	// age
+	age := buildAge()
+	fmt.Println(age)
+
+	// height
+	height := buildHeight()
+	fmt.Println(height)
+
+	// weight
+	weight := buildWeight()
+	fmt.Println(weight)
+
+	// Example using full Build
+	//person := createPerson()
+	
+	//person.printCredentials()
+
+
 
 }
 

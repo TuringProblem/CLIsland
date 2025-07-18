@@ -47,8 +47,13 @@ type Person struct {
 
 func createPerson() *Person {
 	myPerson := Person{
-		Name: buildName(getRandomSex()),
+		Name: "",
+	 	Age:  buildAge(),
+		Height: buildHeight(),
+		Weight: buildWeight(),
+		Sex: buildSex(),
 	}
+	myPerson.Name = selectName(myPerson.Sex)
 	return &myPerson
 }
 
@@ -59,6 +64,10 @@ func buildPerson() Person {
 	p.Age = rand.Intn(100)
 	p.Height, p.Weight = heightWeightPrompt()
 	return p
+}
+
+func (p *Person) printCredentials() {
+	TUIPrint(fmt.Sprintf("{Name: %s\nAge: %d\nHeight: %.2f\nWeight: %.2f\nSex: %s\n}", p.Name, p.Age, p.Height, p.Weight, p.Sex))
 }
 
 func (p *Person) mySexAsInt() int {

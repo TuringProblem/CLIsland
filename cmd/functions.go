@@ -9,10 +9,11 @@ func setSexForBuild(input int) (Sex, string) {
 }
 
 func selectName(sex Sex) string {
-	promptName()
+	name := promptName()
 	if sex == Male {
-		return "Chris"
+		TUIPrint(generateRandomNameFromFile(sex))
 	} else {
-		return "Huda"
+		TUIPrint(generateRandomNameFromFile(sex))
 	}
+	return name
 }
