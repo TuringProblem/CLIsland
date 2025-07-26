@@ -2,40 +2,97 @@ package main
 
 import (
 	"fmt"
+	"os"
+	"sort"
+	"time"
 )
 
-func start(message string) {
-	TUIPrint(message)
+var myPrompts []string
+
+func start(person Person) {
+	TUIPrint(iGOTATEEEEEXT)
+	TUIPrint(person.Name)
+	person.PrintPersonInterestsPretty()
+	time.Sleep(time.Duration(2) * time.Second)
+	TUIPrint(CLEAR_SCREEN + HOME)
+
+	time.Sleep(time.Duration(2) * time.Second)
+
 	loveMenu()
 	characterBuild()
 }
 
 func loveMenu() {
 	TUIPrint(CLEAR_SCREEN + HOME)
-	for _, v := range getSectionPrompts["main_menu"] {
+	myPrompts = addPromptAndSort(getSectionPrompts["main_menu"])
+	for _, v := range myPrompts {
 		TUIPrint(v)
 	}
+	handLoveMenuInput()
+
 }
+
+func handLoveMenuInput() {
+	var input int
+	TUIPrint("Please select an option:")
+	myValue, err := fmt.Scanln(&input)
+	if err != nil {
+		fmt.Println("Error reading input:", err)
+		os.Exit(1)
+	}
+	switch myValue {
+	case 1:
+		characterBuild()
+	case 2:
+		//settingsBuild()
+		TUIPrint(CLEAR_SCREEN + HOME)
+		loveMenu()
+	case 3:
+		os.Exit(0)
+	default:
+		fail()
+	}
+}
+
 func characterBuild() {
-	TUIPrint(CLEAR_SCREEN)
-	for k, v := range getSectionPrompts["character"] {
-		if k == "sex" {
-			handlePromptIterator(v)
-		}
-	}
-	examplePerson := createExamplePerson()
+	TUIPrint(CLEAR_SCREEN + HOME)
+	// build character by each part
 
-	examplePerson.PrintPersonInterestsPretty()
+	// sex
+	mySex := buildSex()
+	fmt.Println(mySex)
+
+	// name
+	name := buildNameExample()
+	fmt.Println(name)
+
+	// age
+	age := buildAge()
+	fmt.Println(age)
+
+	// height
+	height := buildHeight()
+	fmt.Println(height)
+
+	// weight
+	weight := buildWeight()
+	fmt.Println(weight)
+
+	// Example using full Build
+	//person := createPerson()
+	
+	//person.printCredentials()
+
+
 
 }
-func handlePromptIterator(prompt string) int {
-	var response int
-	TUIPrint(prompt)
-	success("Please Select:\n[1] male [2] female")
-	response, err := fmt.Scan(&response)
-	if err == nil {
-		fmt.Errorf("Seems to be an error with %d", response)
-	}
 
-	return response
+func addPromptAndSort(prompt map[string]string) []string {
+	for _, v := range prompt {
+		myPrompts = append(myPrompts, v)
+	}
+	sort.Slice(myPrompts, func(i, j int) bool {
+		return myPrompts[i] < myPrompts[j]
+	})
+	return myPrompts
 }

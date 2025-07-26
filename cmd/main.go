@@ -240,6 +240,7 @@ func handleCharacterInteraction(ctx context.Context, gameEngine domain.GameEngin
 	case 1:
 		interactionType = domain.InteractionTypeConversation
 	case 2:
+
 		interactionType = domain.InteractionTypeDate
 	case 3:
 		interactionType = domain.InteractionTypeChallenge
@@ -249,11 +250,11 @@ func handleCharacterInteraction(ctx context.Context, gameEngine domain.GameEngin
 		interactionType = domain.InteractionTypeArgument
 	}
 
-	// Perform interaction
 	_, err = gameEngine.InteractWithCharacter(ctx, selectedCharacter.ID, interactionType)
 	if err != nil {
 		fmt.Printf("Error during interaction: %v\n", err)
 		return
+
 	}
 
 	fmt.Printf("You had a %s with %s!\n", strings.ToLower(string(interactionType)), selectedCharacter.Name)

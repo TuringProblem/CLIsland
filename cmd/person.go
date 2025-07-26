@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"math/rand"
 )
 
 type Sex string
@@ -40,8 +41,72 @@ type Person struct {
 	Age       int
 	Height    float64 // inches
 	Weight    float64
-	sex       Sex
+	Sex       Sex
 	Interests Interests
+}
+
+func createPerson() *Person {
+	myPerson := Person{
+		Name: "",
+	 	Age:  buildAge(),
+		Height: buildHeight(),
+		Weight: buildWeight(),
+		Sex: buildSex(),
+	}
+	myPerson.Name = selectName(myPerson.Sex)
+	return &myPerson
+}
+
+func buildPerson() Person {
+	p := Person{}
+	p.Sex, _ = setSexForBuild(p.mySexAsInt())
+	p.Name = selectName(p.Sex)
+	p.Age = rand.Intn(100)
+	p.Height, p.Weight = heightWeightPrompt()
+	return p
+}
+
+func (p *Person) printCredentials() {
+	TUIPrint(fmt.Sprintf("{Name: %s\nAge: %d\nHeight: %.2f\nWeight: %.2f\nSex: %s\n}", p.Name, p.Age, p.Height, p.Weight, p.Sex))
+}
+
+func (p *Person) mySexAsInt() int {
+	if p.Sex == Male {
+		return 1
+	} else {
+		return 2
+	}
+}
+
+func createRandomPerson() Person {
+	myPerson := Person{
+		Name:   "",
+		Age:    rand.Intn(100),
+		Height: rand.Float64() * 100,
+		Weight: rand.Float64() * 100,
+		Sex:    getRandomSex(),
+		Interests: Interests{
+			InterestType: map[Interest]int{
+				Music:   rand.Intn(10),
+				Sports:  rand.Intn(10),
+				Reading: rand.Intn(10),
+				Writing: rand.Intn(10),
+				Coding:  rand.Intn(10),
+				Art:     rand.Intn(10),
+				Travel:  rand.Intn(10),
+			},
+		},
+	}
+	myPerson.Name = selectName(myPerson.Sex)
+	return myPerson
+}
+func getRandomSex() Sex {
+	randomValue := rand.Intn(2)
+	if randomValue == 0 {
+		return Male
+	} else {
+		return Female
+	}
 }
 
 func createExamplePerson() Person {
@@ -50,7 +115,7 @@ func createExamplePerson() Person {
 		Age:    30, //can't be below 18
 		Height: 73, // TODO: Need to make a converter to go from inches to ft. :) && also to cm for UK brev
 		Weight: 70,
-		sex:    Male,
+		Sex:    getRandomSex(),
 		Interests: Interests{
 			InterestType: map[Interest]int{
 				Music:   5,
@@ -81,6 +146,7 @@ func (p *Person) PrintPersonInterestsPretty() {
 	}
 }
 
+// TODO: Figure out a more clever way to solve this -> feel like maybe a for loop... even a map
 func printAsBlock(interestWeight int) string {
 	switch interestWeight {
 	case 1:
