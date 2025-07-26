@@ -1,0 +1,144 @@
+run:
+  timeout: 5m
+  go: "1.21"
+  modules-download-mode: readonly
+
+linters-settings:
+  # https://github.com/golangci/golangci-lint/blob/master/.golangci.yml
+  govet:
+    check-shadowing: true
+  gocyclo:
+    min-complexity: 15
+  maligned:
+    suggest-new: true
+  dupl:
+    threshold: 100
+  goconst:
+    min-len: 2
+    min-occurrences: 3
+  misspell:
+    locale: US
+  lll:
+    line-length: 140
+  goimports:
+    local-prefixes: github.com/TuringProblem/CLIsland
+  gocritic:
+    enabled-tags:
+      - diagnostic
+      - experimental
+      - opinionated
+      - performance
+      - style
+    disabled-checks:
+      - dupImport # https://github.com/go-critic/go-critic/issues/845
+      - ifElseChain
+      - octalLiteral
+      - whyNoLint
+      - wrapperFunc
+  gosec:
+    excludes:
+      - G404 # Use of weak random number generator (math/rand instead of crypto/rand)
+  funlen:
+    lines: 100
+    statements: 50
+  gocognit:
+    min-complexity: 15
+  noctx:
+    include: []
+  exhaustive:
+    default-signifies-exhaustive: true
+  exhaustiveStruct:
+    struct-patterns:
+      - github.com/TuringProblem/CLIsland/internal/domain.*
+  errorlint:
+    errorf: true
+    asserts: true
+    comparison: true
+
+linters:
+  disable-all: true
+  enable:
+    # https://golangci-lint.run/usage/linters/
+    - bodyclose
+    - deadcode
+    - depguard
+    - dogsled
+    - dupl
+    - errcheck
+    - exhaustive
+    - exhaustiveStruct
+    - exportloopref
+    - forbidigo
+    - funlen
+    - gci
+    - gocognit
+    - goconst
+    - gocritic
+    - gocyclo
+    - gofmt
+    - gofumpt
+    - goheader
+    - goimports
+    - gomnd
+    - gomodguard
+    - goprintffuncname
+    - gosec
+    - gosimple
+    - govet
+    - ineffassign
+    - lll
+    - makezero
+    - misspell
+    - nakedret
+    - noctx
+    - nolintlint
+    - prealloc
+    - predeclared
+    - revive
+    - staticcheck
+    - stylecheck
+    - thelper
+    - tparallel
+    - typecheck
+    - unconvert
+    - unparam
+    - unused
+    - varcheck
+    - whitespace
+    - wrapcheck
+
+issues:
+  exclude-rules:
+    - path: _test\.go
+      linters:
+        - gomnd
+        - goconst
+        - funlen
+        - gocognit
+        - gocyclo
+        - dupl
+        - thelper
+        - tparallel
+    - path: internal/services/stub_services\.go
+      linters:
+        - unused
+        - deadcode
+    - path: cmd/
+      linters:
+        - gosec # CLI commands often need to read files
+        - gomnd # Magic numbers in CLI are often acceptable
+    - path: tests/
+      linters:
+        - gosec
+        - gomnd
+        - goconst
+        - funlen
+        - gocognit
+        - gocyclo
+        - dupl
+        - thelper
+        - tparallel
+        - wrapcheck
+
+  max-issues-per-linter: 0
+  max-same-issues: 0 

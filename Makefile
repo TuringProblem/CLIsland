@@ -1,138 +1,103 @@
-# CLIsland Makefile
-# Build, test, and development tasks for the Love Island CLI game
 
-# Variables
-BINARY_NAME=clisland
-BUILD_DIR=build
-MAIN_PACKAGE=./cmd
-MODULE_NAME=github.com/TuringProblem/CLIsland
+# Makefile for CLIsland
 
-# Go build flags
-LDFLAGS=-ldflags "-s -w"
-BUILD_FLAGS=-trimpath
+BINARY=clisland
+PKG=./...
+VERSION?=$(shell git describe --tags --always --dirty)
 
-# Default target
-.PHONY: all
+.PHONY: all build run test test-unit test-integration test-e2e test-all fmt coverage clean lint security release help
+
 all: build
 
-# Build the application
-.PHONY: build
-build: deps
-	@echo "Building $(BINARY_NAME)..."
-	@mkdir -p $(BUILD_DIR)
-	go build $(BUILD_FLAGS) $(LDFLAGS) -o $(BINARY_NAME) $(MAIN_PACKAGE)
-	@echo "✅ Build complete: ./$(BINARY_NAME)"
+help: ## Show this help message
+	@echo 'Usage: make [target]'
+	@echo ''
+	@echo 'Targets:'
+	@awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z_-]+:.*?## / {printf "  %-15s %s\n", $$1, $$2}' $(MAKEFILE_LIST)
 
-# Build for development (with debug info)
-.PHONY: build-dev
-build-dev: deps
-	@echo "Building $(BINARY_NAME) for development..."
-	@mkdir -p $(BUILD_DIR)
-	go build -o $(BINARY_NAME) $(MAIN_PACKAGE)
-	@echo "✅ Development build complete: ./$(BINARY_NAME)"
+build: ## Build the application
+	go build -ldflags="-s -w -X main.version=$(VERSION)" -o $(BINARY) ./cmd/main.go
 
-# Run the application
-.PHONY: run
-run: deps
-	@echo "Running $(BINARY_NAME)..."
-	go run $(MAIN_PACKAGE)
+build-all: ## Build for all platforms
+	@echo "Building for multiple platforms..."
+	GOOS=linux GOARCH=amd64 go build -ldflags="-s -w -X main.version=$(VERSION)" -o clisland-linux-amd64 ./cmd/main.go
+	GOOS=linux GOARCH=arm64 go build -ldflags="-s -w -X main.version=$(VERSION)" -o clisland-linux-arm64 ./cmd/main.go
+	GOOS=darwin GOARCH=amd64 go build -ldflags="-s -w -X main.version=$(VERSION)" -o clisland-darwin-amd64 ./cmd/main.go
+	GOOS=darwin GOARCH=arm64 go build -ldflags="-s -w -X main.version=$(VERSION)" -o clisland-darwin-arm64 ./cmd/main.go
+	GOOS=windows GOARCH=amd64 go build -ldflags="-s -w -X main.version=$(VERSION)" -o clisland-windows-amd64.exe ./cmd/main.go
+	GOOS=windows GOARCH=arm64 go build -ldflags="-s -w -X main.version=$(VERSION)" -o clisland-windows-arm64.exe ./cmd/main.go
+
+run: ## Run the application
+	go run ./cmd/main.go
+
+# Test targets
+test: test-unit ## Run unit tests
+
+test-unit: ## Run unit tests only
+	@echo "Running unit tests..."
+	go test -v -race -coverprofile=coverage.out -covermode=atomic ./tests/unit/...
+
+test-integration: ## Run integration tests
+	@echo "Running integration tests..."
+	go test -v -race -coverprofile=coverage.out -covermode=atomic ./tests/integration/...
+
+test-e2e: ## Run end-to-end tests
+	@echo "Running end-to-end tests..."
+	go test -v -race -coverprofile=coverage.out -covermode=atomic ./tests/e2e/...
+
+test-all: test-unit test-integration test-e2e ## Run all tests
+
+test-coverage: ## Run tests with coverage report
+	go test -v -race -coverprofile=coverage.out -covermode=atomic ./...
+	go test -v -race -coverprofile=coverage.out -covermode=atomic ./tests/...
+	go tool cover -func=coverage.out
+	go tool cover -html=coverage.out -o coverage.html
+
+# Legacy test target for backward compatibility
+test-legacy: ## Run legacy tests
+	go test -v $(PKG)
+
+fmt: ## Format code
+	gofmt -s -w .
+	goimports -w .
+
+lint: ## Run linter
+	golangci-lint run
+
+lint-fix: ## Run linter with auto-fix
+	golangci-lint run --fix
+
+security: ## Run security scan
+	gosec ./...
+
+coverage: ## Generate coverage report
+	go test -coverprofile=coverage.out $(PKG)
+	go tool cover -func=coverage.out
 
 # Clean build artifacts
-.PHONY: clean
-clean:
-	@echo "Cleaning build artifacts..."
-	@rm -f $(BINARY_NAME)
-	@rm -rf $(BUILD_DIR)
-	@echo "✅ Clean complete"
+clean: ## Clean build artifacts
+	rm -f $(BINARY)
+	rm -f clisland-*
+	rm -f coverage.out
+	rm -f coverage.html
+	rm -f checksums.txt
+	go clean -cache
 
-# Run tests
-.PHONY: test
-test:
-	@echo "Running tests..."
-	go test -v ./...
+# Release targets
+release: clean build-all ## Build release artifacts
+	@echo "Creating release artifacts..."
+	sha256sum clisland-* > checksums.txt
+	@echo "Release artifacts created:"
+	@ls -la clisland-*
+	@echo "Checksums:"
+	@cat checksums.txt
 
-# Run tests with coverage
-.PHONY: test-coverage
-test-coverage:
-	@echo "Running tests with coverage..."
-	go test -v -coverprofile=coverage.out ./...
-	go tool cover -html=coverage.out -o coverage.html
-	@echo "✅ Coverage report generated: coverage.html"
-
-# Format code
-.PHONY: fmt
-fmt:
-	@echo "Formatting code..."
-	go fmt ./...
-	@echo "✅ Code formatting complete"
-
-# Vet code
-.PHONY: vet
-vet:
-	@echo "Vetting code..."
-	go vet ./...
-	@echo "✅ Code vetting complete"
-
-# Run all quality checks
-.PHONY: check
-check: fmt vet test
-	@echo "✅ All quality checks passed"
-
-# Install the binary
-.PHONY: install
-install: build
-	@echo "Installing $(BINARY_NAME)..."
-	go install $(MAIN_PACKAGE)
-	@echo "✅ $(BINARY_NAME) installed to GOPATH"
-
-# Install dependencies
-.PHONY: deps
-deps:
-	@echo "Installing dependencies..."
+# Development targets
+dev-setup: ## Setup development environment
 	go mod download
-	go mod tidy
-	go mod verify
-	@echo "✅ Dependencies installed and verified"
+	go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
+	go install golang.org/x/tools/cmd/goimports@latest
+	go install github.com/securecodewarrior/gosec/v2/cmd/gosec@latest
 
-# Build for multiple platforms
-.PHONY: build-all
-build-all: clean
-	@echo "Building for multiple platforms..."
-	@mkdir -p $(BUILD_DIR)
-	
-	# Linux
-	GOOS=linux GOARCH=amd64 go build $(BUILD_FLAGS) $(LDFLAGS) -o $(BUILD_DIR)/$(BINARY_NAME)-linux-amd64 $(MAIN_PACKAGE)
-	
-	# macOS
-	GOOS=darwin GOARCH=amd64 go build $(BUILD_FLAGS) $(LDFLAGS) -o $(BUILD_DIR)/$(BINARY_NAME)-darwin-amd64 $(MAIN_PACKAGE)
-	GOOS=darwin GOARCH=arm64 go build $(BUILD_FLAGS) $(LDFLAGS) -o $(BUILD_DIR)/$(BINARY_NAME)-darwin-arm64 $(MAIN_PACKAGE)
-	
-	# Windows
-	GOOS=windows GOARCH=amd64 go build $(BUILD_FLAGS) $(LDFLAGS) -o $(BUILD_DIR)/$(BINARY_NAME)-windows-amd64.exe $(MAIN_PACKAGE)
-	
-	@echo "✅ Multi-platform builds complete in $(BUILD_DIR)/"
-
-# Show help
-.PHONY: help
-help:
-	@echo "CLIsland Makefile - Available targets:"
-	@echo ""
-	@echo "  build        - Build the clisland executable (default)"
-	@echo "  build-dev    - Build with debug info"
-	@echo "  build-all    - Build for multiple platforms (Linux, macOS, Windows)"
-	@echo "  run          - Run the application directly"
-	@echo "  test         - Run all tests"
-	@echo "  test-coverage- Run tests with coverage report"
-	@echo "  fmt          - Format code"
-	@echo "  vet          - Vet code for common issues"
-	@echo "  deps         - Install and tidy dependencies"
-	@echo "  clean        - Remove build artifacts"
-	@echo "  check        - Run fmt, vet, and test"
-	@echo "  install      - Install the binary to GOPATH"
-	@echo "  help         - Show this help message"
-	@echo ""
-	@echo "Examples:"
-	@echo "  make build   # Build the executable"
-	@echo "  make run     # Run the game"
-	@echo "  make test    # Run tests"
-	@echo "  make check   # Run all quality checks"
+# CI/CD targets
+ci: test-unit lint security ## Run CI checks locally 

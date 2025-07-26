@@ -19,6 +19,7 @@ func start(person Person) {
 	time.Sleep(time.Duration(2) * time.Second)
 
 	loveMenu()
+	characterBuild()
 }
 
 func loveMenu() {
