@@ -1,0 +1,26 @@
+name: QLTY.dev Analysis
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  qulty:
+    name: QLTY.dev Analysis
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: QLTY.dev Analysis
+      uses: qulty-dev/github-action@v1
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        # Optional: Add your QLTY.dev API key if you have one
+        # api_key: ${{ secrets.QLTY_API_KEY }} 

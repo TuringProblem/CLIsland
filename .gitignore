@@ -35,6 +35,9 @@ dist/
 build/
 *.o
 *.a
+clisland
+clisland-*
+checksums.txt
 
 # Environment files
 .env

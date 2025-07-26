@@ -1,5 +1,13 @@
 # CLIsland
 
+[![Go Version](https://img.shields.io/badge/go-1.21+-blue.svg)](https://golang.org)
+[![Build Status](https://github.com/TuringProblem/CLIsland/workflows/CI/badge.svg)](https://github.com/TuringProblem/CLIsland/actions)
+[![Test Coverage](https://codecov.io/gh/TuringProblem/CLIsland/branch/main/graph/badge.svg)](https://codecov.io/gh/TuringProblem/CLIsland)
+[![Go Report Card](https://goreportcard.com/badge/github.com/TuringProblem/CLIsland)](https://goreportcard.com/report/github.com/TuringProblem/CLIsland)
+[![GoDoc](https://godoc.org/github.com/TuringProblem/CLIsland?status.svg)](https://godoc.org/github.com/TuringProblem/CLIsland)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![Release](https://img.shields.io/github/v/release/TuringProblem/CLIsland)](https://github.com/TuringProblem/CLIsland/releases)
+
 CLIsland is a command-line, single-player narrative game inspired by Love Island, written in Go. The game features branching dialogue, relationship management, and drama, all through a clean, modular, and testable architecture.
 
 ## Features
@@ -69,6 +77,52 @@ make coverage
 # Format the code
 make fmt
 ```
+
+## Development
+
+### Setup Development Environment
+```bash
+# Install development tools
+make dev-setup
+
+# Run all CI checks locally
+make ci
+```
+
+### Available Make Targets
+```bash
+# Show all available targets
+make help
+
+# Build for all platforms
+make build-all
+
+# Run tests with coverage
+make test-coverage
+
+# Run linter
+make lint
+
+# Run security scan
+make security
+
+# Create release artifacts
+make release
+```
+
+## CI/CD
+
+This project uses GitHub Actions for continuous integration and deployment:
+
+- **Tests**: Run on every push and PR with Go 1.21 and 1.22
+- **Linting**: Uses golangci-lint with comprehensive rules
+- **Security**: Automated security scanning with gosec
+- **Coverage**: Code coverage uploaded to Codecov
+- **Releases**: Automated releases on tag push
+
+### Workflow Status
+- [![CI](https://github.com/TuringProblem/CLIsland/workflows/CI/badge.svg)](https://github.com/TuringProblem/CLIsland/actions/workflows/ci.yml)
+- [![Release](https://github.com/TuringProblem/CLIsland/workflows/Release/badge.svg)](https://github.com/TuringProblem/CLIsland/actions/workflows/release.yml)
 
 ## How to Play
 
